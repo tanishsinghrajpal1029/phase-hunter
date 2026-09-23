@@ -23,6 +23,13 @@
   .logo h1{margin:0;font-size:26px;font-weight:800;letter-spacing:-.3px}
   .logo small{display:block;font-size:11px;color:var(--muted);letter-spacing:.14em;text-transform:uppercase}
   .hud{margin-left:auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+  /* team crest: the phase boundary itself, which is the only emblem this project has earned */
+  .team{display:flex;align-items:center;gap:8px;padding:5px 12px 5px 9px;border:1px solid var(--edge);
+        border-radius:999px;background:linear-gradient(180deg,#16283F,#101E31)}
+  .team .tt{font-size:10px;letter-spacing:.17em;text-transform:uppercase;color:var(--muted);line-height:1.25}
+  .team .tt b{display:block;font-size:12.5px;letter-spacing:.13em;color:var(--gold);font-weight:800}
+  .sheet .team{margin:16px auto 0;width:max-content;opacity:.85}
+  @media (max-width:640px){ .team{display:none} }
   .pill{background:var(--panel);border:1px solid var(--edge);border-radius:999px;padding:8px 15px;
         display:flex;align-items:center;gap:9px;font-size:13px}
   .pill b{font-size:17px;font-variant-numeric:tabular-nums}
@@ -173,6 +180,7 @@
       </svg>
       <div><h1>Phase Hunter</h1><small>find the hidden phases</small></div>
     </div>
+    <div class="team" title="Team Popeyes"><svg class="crest" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4 20.4 5.2v7.1c0 4.2-3.3 7.6-8.4 9.3-5.1-1.7-8.4-5.1-8.4-9.3V5.2Z" fill="#0f1c2e" stroke="#34C2B0" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.6 15.4 12 8.6l5.4 6.8" fill="none" stroke="#EDF4F8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.1" cy="12.4" r="1.5" fill="#E08B45"/></svg><span class="tt">team<b>Popeyes</b></span></div>
     <div class="hud">
       <div class="pill">⚡ <b id="energy">60</b><div class="bar"><i id="energyBar" style="width:100%"></i></div></div>
       <div class="pill">📡 pings <b id="pings">0</b></div>
@@ -558,7 +566,8 @@ function showResult(id, s){
       <button class="btn" id="again">New map, same stage</button>
       ${stage<data.stages.length-1?`<button class="btn ghost" id="next">Next stage →</button>`:""}
       <button class="btn ghost" id="close">Look at the map</button>
-    </div>`;
+    </div>
+    <div class="team"><svg class="crest" width="24" height="24" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4 20.4 5.2v7.1c0 4.2-3.3 7.6-8.4 9.3-5.1-1.7-8.4-5.1-8.4-9.3V5.2Z" fill="#0f1c2e" stroke="#34C2B0" stroke-width="1.5" stroke-linejoin="round"/><path d="M6.6 15.4 12 8.6l5.4 6.8" fill="none" stroke="#EDF4F8" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><circle cx="9.1" cy="12.4" r="1.5" fill="#E08B45"/></svg><span class="tt">team<b>Popeyes</b></span></div>`;
   document.getElementById("result").classList.add("show");
   document.getElementById("again").onclick=()=>{hideResult(); newRound();};
   document.getElementById("close").onclick=hideResult;

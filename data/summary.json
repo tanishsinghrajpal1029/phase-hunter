@@ -1,12 +1,12 @@
 {
-  "backend": "numpy",
+  "backend": "pennylane",
   "qubits": 8,
   "grid": [
     40,
     40
   ],
   "ground_states": 1600,
-  "seconds": 8.45,
+  "seconds": 40.21,
   "accuracy_excluding_floating": 0.9228,
   "accuracy_all_cells": 0.8894,
   "floating_cell_fraction": 0.0362
