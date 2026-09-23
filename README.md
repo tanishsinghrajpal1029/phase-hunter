@@ -104,12 +104,20 @@ work should pick N = 8 or 12, never 6 or 10.
 ![budget study](figures/budget_study.png)
 
 Four strategies pick where to measure under a fixed budget; each ping carries real shot noise; a
-boundary is reconstructed from the pings alone and scored against ground truth over 40 seeds. Adaptive
-sampling — a coarse sweep, then every remaining ping beside the current boundary estimate — is worth
-the most where budget is scarce: at 10 pings on the clean stage it labels 88% of the map correctly
-against 77% for bisection and 82% for random. Random sampling needs roughly twice the budget of any
-structured strategy to clear 90%. By 36–50 pings all four converge near 92–93%, the ceiling set by the
-reconstruction and the grid, so the advantage is in the cheap regime rather than asymptotically.
+boundary is reconstructed from the pings alone and scored against ground truth over 200 seeds.
+Adaptive sampling — a coarse sweep, then every remaining ping beside the current boundary estimate —
+is worth the most where budget is scarce: at 10 pings on the clean stage it labels 87.5% of the map
+correctly against 78.5% for bisection and 81.3% for random. Random sampling needs roughly twice the
+budget of any structured strategy to clear 90%. By 36–50 pings the structured strategies sit between
+92% and 93% on the clean stage while random still trails at 90–91%, so the advantage is in the cheap
+regime rather than asymptotically — and that ceiling is set by our reconstruction and grid resolution,
+not by the physics.
+
+The budget ladder (6, 10, 16, 24, 36, 50) is coarse, so a crossing whose mean sits within a standard
+error of the 90% line can land one rung either way on a different machine. `budget_study.py` flags
+those itself and `data/budget_study.json` records them — currently three of the twelve crossings.
+Raising the seed count from 40 to 200 moved one of them (adaptive at p = 0.05, from 16 pings to 24),
+which is why the count is 200 and why the borderline cases are named rather than quoted as exact.
 
 ---
 
@@ -227,7 +235,9 @@ never out of date with the code.
 
 ## How to run
 
-Only numpy and matplotlib are needed for everything except the noisy simulation.
+Only numpy and matplotlib are needed for everything except the noisy simulation, which needs
+PennyLane, and `make_stages.py`, which needs scipy for the sparse ground states of the 12-spin
+stage. `pip install -r requirements.txt` covers all of it.
 
 ```bash
 # the notebook: every result, top to bottom

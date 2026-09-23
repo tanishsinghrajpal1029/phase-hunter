@@ -164,11 +164,17 @@ def main() -> None:
                ["Adaptive (coarse sweep, then sample the edge)", str(to90['Clear skies']['adaptive']), str(to90['Static']['adaptive']), str(to90['Whiteout']['adaptive'])]],
               [3.2 * inch, (CW - 3.2 * inch) / 3, (CW - 3.2 * inch) / 3, (CW - 3.2 * inch) / 3])]),
         Spacer(1, 6),
-        P("Adaptive sampling pays where the budget is scarce — at 10 pings on the clean stage it labels 88% of the "
-          "map correctly against 77% for bisection and 82% for random — and random sampling needs roughly twice the "
-          "budget of any structured strategy to clear 90%. By 36–50 pings all four converge near 92–93%, the ceiling "
-          "set by our reconstruction and grid resolution, so the advantage is in the cheap regime rather than "
-          "asymptotically. We report this as measured on our own pipeline, not as a general claim."),
+        P(f"Adaptive sampling pays where the budget is scarce — at 10 pings on the clean stage it labels "
+          f"{budget['Clear skies']['adaptive']['10']['mean']:.1%} of the map correctly against "
+          f"{budget['Clear skies']['bisect']['10']['mean']:.1%} for bisection and "
+          f"{budget['Clear skies']['random']['10']['mean']:.1%} for random — and random sampling needs roughly "
+          f"twice the budget of any structured strategy to clear 90%. By 36–50 pings the structured strategies sit "
+          f"between 92% and 93% on the clean stage while random still trails at 90–91%, so the advantage is in the "
+          f"cheap regime rather than asymptotically, and that ceiling is our reconstruction and grid resolution "
+          f"rather than physics. Averaged over {budget['seeds']} seeds per point. The budget ladder is coarse, so a "
+          f"crossing whose mean sits within a standard error of the 90% line can move one rung on another machine; "
+          f"the script flags those itself, and {len(budget['borderline_crossings'])} of the twelve crossings "
+          f"currently qualify. We report this as measured on our own pipeline, not as a general claim."),
 
         figure(ROOT / "figures/budget_study.png", FIG,
                "Accuracy versus measurement budget at each noise level; bands are one standard deviation over 40 seeds."),

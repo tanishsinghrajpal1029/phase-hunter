@@ -32,7 +32,7 @@ FERRO, PARA, ANTI, FLOAT = 0, 1, 2, 3
 ORDER_THRESHOLD = 0.46          # calibrated once on the clean stage, then frozen
 SHOTS = 100
 BUDGETS = [6, 10, 16, 24, 36, 50]
-SEEDS = 40
+SEEDS = 200
 TEAL, ORANGE, PURPLE, BLUE, NAVY = "#007F7A", "#D4742B", "#7356A6", "#377CA8", "#152638"
 COLORS = {"random": "#8FA6BA", "grid": BLUE, "bisect": ORANGE, "adaptive": TEAL}
 
@@ -146,16 +146,30 @@ def main() -> None:
         print(f"{stage.name:12} " + "  ".join(
             f"{st}:{results[key][st][2][1]:.1%}@16" for st in ("random", "grid", "bisect", "adaptive")))
 
-    # pings needed to reach 90% accuracy, by interpolation
-    needed = {}
+    # Pings needed to reach 90%. The budget ladder is coarse, so a crossing whose mean
+    # sits within two standard errors of the line could land one rung either way on a
+    # different machine. Those are flagged rather than quoted as if they were exact.
+    needed, borderline = {}, []
     for key in chosen:
         needed[stages[key].name] = {}
         for strategy, rows in results[key].items():
-            budgets = [b for b, _, _ in rows]; means = [m for _, m, _ in rows]
-            hit = next((b for b, m in zip(budgets, means) if m >= 0.90), None)
+            hit = next((b for b, m, _ in rows if m >= 0.90), None)
             needed[stages[key].name][strategy] = hit
+            for budget, mean, sd in rows:
+                if budget == hit or (hit is not None and budget == max(
+                        (b for b, _, _ in rows if b < hit), default=None)):
+                    error = sd / np.sqrt(SEEDS)
+                    if abs(mean - 0.90) < 2 * error:
+                        borderline.append({"stage": stages[key].name, "strategy": strategy,
+                                           "budget": budget, "mean": round(mean, 4),
+                                           "standard_error": round(error, 4)})
     report["pings_to_reach_90pct"] = needed
+    report["borderline_crossings"] = borderline
+    report["seeds"] = SEEDS
     (ROOT / "data/budget_study.json").write_text(json.dumps(report, indent=2))
+    for row in borderline:
+        print(f"  borderline: {row['stage']} / {row['strategy']} at {row['budget']} pings is "
+              f"{row['mean']:.3f} +/- {row['standard_error']:.3f} - within noise of the 90% line")
 
     figure, axes = plt.subplots(1, len(chosen), figsize=(4.4 * len(chosen), 3.6), sharey=True)
     for axis, key in zip(axes, chosen):

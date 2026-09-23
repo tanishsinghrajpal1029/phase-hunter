@@ -1,6 +1,10 @@
-# numpy reference path (what produced the current figures)
+# numpy reference path (the clean diagrams, the classifier, every analysis script)
 numpy>=1.26
 matplotlib>=3.8
+
+# sparse Lanczos ground states for N >= 10 (src/annni.py); scripts/make_stages.py
+# needs it for the 12-spin stage
+scipy>=1.11
 
 # PennyLane path (src/pennylane_pipeline.py, scripts/run_pennylane.py).
 # The Scientific Track environment pins this version:
